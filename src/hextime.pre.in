@@ -1,5 +1,23 @@
 #!@BASH@
 
+#
+# hextime-bash @PACKAGE_VERSION@ - An implementation of hextime in bash
+# Copyright (C) 2015  Charles Southerland <charlie@stuphlabs.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 set -e
 
 AWK_CMD="@AWK@"
@@ -14,10 +32,22 @@ LEAP_SECONDS_URL="https://www.ietf.org/timezones/data/leap-seconds.list"
 UNIX_LEAP_SECONDS_FILE="$DATAPATH/unix-leap-seconds.list"
 OLD_OFFSET=$((365 * 24 * 60 * 60))
 
-USAGE_MSG="Usage:\thextime [DATESTRING]\n\thextime -d HEXTIME\n\thextime --fetch\n\thextime --help"
-OUT_OF_DATE_MSG="hextime: The time offset database may be out of date.\nPlease run \"hextime --fetch\" fix the problem."
+USAGE_MSG="Usage:\thextime [DATESTRING]\n\thextime -d HEXTIME\n\thextime --update\n\thextime --help\n\thextime --version"
+EXPLANATION_MSG="hextime is a hexadecimal representation of the actual number of seconds which\nhave passed since the Unix epoch (exactly midnight of 1 January 1970 UTC).\nUnlike some other measures of time, hextime does not include leap seconds;\nhextime is intended to be a linear measure of real time."
+OUT_OF_DATE_MSG="hextime: The time offset database may be out of date.\nPlease run \"hextime --update\" fix the problem."
+COPYRIGHT_MSG="hextime-bash @PACKAGE_VERSION@  Copyright (C) 2015  Charles Southerland"
+LICENSE_MSG="This program is released under the terms of the GNU GPL v3 or later.\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under\ncertain conditions.See https://www.gnu.org/licenses/ for details."
+BUG_REPORT_MSG="Please report bugs at <https://github.com/proidiot/hextime-bash/issues>."
 
-if [ "$1" == "--fetch" ]
+if [ "$1" == "--version" ]
+then
+	echo -e $COPYRIGHT_MSG
+	echo ""
+	echo -e $LICENSE_MSG
+	exit 0
+fi
+
+if [ "$1" == "--update" ]
 then
 	$WGET_CMD -O - $LEAP_SECONDS_URL | $AWK_CMD '$1~/^[^#].+$/{print $1-2208988800"\t"$2}' > $UNIX_LEAP_SECONDS_FILE
 	exit 0
@@ -34,6 +64,14 @@ fi
 if [[ "$1" == "-h" || "$1" == "--help" ]]
 then
 	echo -e $USAGE_MSG
+	echo -e "\n"
+	echo -e $EXPLANATION_MSG
+	echo -e "\n"
+	echo -e $COPYRIGHT_MSG
+	echo ""
+	echo -e $BUG_REPORT_MSG
+	echo ""
+	echo -e $LICENSE_MSG
 	exit 0
 fi
 

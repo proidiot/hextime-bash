@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_INIT([hextime-bash], [0.1.0], [charlie@stuphlabs.com])
-AC_CONFIG_SRCDIR([./hextime.pre.in])
+AC_INIT([hextime-bash], [0.2.0], [charlie@stuphlabs.com])
+AC_CONFIG_SRCDIR([src/hextime.pre.in])
 AM_INIT_AUTOMAKE([])
 
 # Checks for programs.
