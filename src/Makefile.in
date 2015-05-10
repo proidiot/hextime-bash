@@ -447,7 +447,7 @@ uninstall-am: uninstall-dist_binSCRIPTS
 #	chmod +x hextime
 
 hextime: hextime.pre
-	cat hextime.pre | $(AWK) '{gsub("@PKGDATADIR@","'$(pkgdatadir)'");print $0}' > hextime
+	cat hextime.pre | $(AWK) '{gsub("@PKGDATADIR@","'$(pkgdatadir)'");print $$0}' > hextime
 	chmod +x hextime
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

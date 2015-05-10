@@ -215,6 +215,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 dist_pkgdata_DATA = unix-leap-seconds.list
+CLEANFILES = $(dist_pkgdata_DATA)
 all: all-am
 
 .SUFFIXES:
@@ -335,6 +336,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -424,6 +426,9 @@ uninstall-am: uninstall-dist_pkgdataDATA
 	mostlyclean mostlyclean-generic pdf pdf-am ps ps-am tags-am \
 	uninstall uninstall-am uninstall-dist_pkgdataDATA
 
+
+unix-leap-seconds.list: leap-seconds.list
+	cat leap-seconds.list | $(AWK) ' $$1~/^[^#].+/{print $$1-2208988800"\t"$$2}' > unix-leap-seconds.list
 
 install-data-hook:
 	touch -t 201501050000.00 $(DESTDIR)$(pkgdatadir)/unix-leap-seconds.list

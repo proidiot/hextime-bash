@@ -6,6 +6,6 @@ CLEANFILES = $(dist_bin_SCRIPTS)
 #	chmod +x hextime
 
 hextime: hextime.pre
-	cat hextime.pre | $(AWK) '{gsub("@PKGDATADIR@","'$(pkgdatadir)'");print $0}' > hextime
+	cat hextime.pre | $(AWK) '{gsub("@PKGDATADIR@","'$(pkgdatadir)'");print $$0}' > hextime
 	chmod +x hextime
 

@@ -13,5 +13,6 @@ Makefile
 
 # project specific
 
+/data/unix-leap-seconds.list
 /src/hextime
 /src/hextime.pre
