@@ -1,0 +1,71 @@
+#!@BASH@
+
+set -e
+
+AWK_CMD="@AWK@"
+DATE_CMD="@DATE@"
+DC_CMD="@DC@"
+WGET_CMD="@WGET@"
+STAT_CMD="@STAT@"
+DATAPATH="@PKGDATADIR@"
+
+LEAP_SECONDS_URL="https://www.ietf.org/timezones/data/leap-seconds.list"
+
+UNIX_LEAP_SECONDS_FILE="$DATAPATH/unix-leap-seconds.list"
+OLD_OFFSET=$((365 * 24 * 60 * 60))
+
+USAGE_MSG="Usage:\thextime [DATESTRING]\n\thextime -d HEXTIME\n\thextime --fetch\n\thextime --help"
+OUT_OF_DATE_MSG="hextime: The time offset database may be out of date.\nPlease run \"hextime --fetch\" fix the problem."
+
+if [ "$1" == "--fetch" ]
+then
+	$WGET_CMD -O - $LEAP_SECONDS_URL | $AWK_CMD '$1~/^[^#].+$/{print $1-2208988800"\t"$2}' > $UNIX_LEAP_SECONDS_FILE
+	exit 0
+fi
+
+LAST_MODIFIED=$($STAT_CMD -c %Y $UNIX_LEAP_SECONDS_FILE)
+OLD_TIME+=$(($($DATE_CMD +%s) - $OLD_OFFSET))
+
+if [ $LAST_MODIFIED -lt $OLD_TIME ]
+then
+	echo -e $OUT_OF_DATE_MSG >&2
+fi
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]
+then
+	echo -e $USAGE_MSG
+	exit 0
+fi
+
+if [ "$1" == "-d" ]
+then
+	if [ "$#" != "2" ]
+	then
+		echo -e $USAGE_MSG >&2
+		exit 1
+	fi
+
+	DECTIME=$(echo "10 o 16 i $2 p" | $DC_CMD)
+
+	OFFSET=$(cat $UNIX_LEAP_SECONDS_FILE | $AWK_CMD '{old=0;offset=0;do{if($1>old&&('$DECTIME'-$2)>=$1){old=$1;offset=$2}}while(getline);print offset;}')
+
+	UNIXTIME=$(($DECTIME - $OFFSET))
+
+	$DATE_CMD -d "00:00:00 jan 1 1970 utc +"$UNIXTIME" seconds"
+
+	exit 0
+fi
+
+if [ "$#" == "0" ]
+then
+	DATESPEC="now"
+else
+	DATESPEC="$@"
+fi
+
+UNIXTIME=$($DATE_CMD -d "$DATESPEC" +%s)
+
+OFFSET=$(cat $UNIX_LEAP_SECONDS_FILE | $AWK_CMD '{old=0;offset=0;do{if($1>old&&('$UNIXTIME')>=$1){old=$1;offset=$2;}}while(getline);print offset;}')
+
+echo "10 i 16 o $UNIXTIME $OFFSET + p" | $DC_CMD
+
