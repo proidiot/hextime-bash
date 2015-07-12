@@ -24,5 +24,6 @@ AC_CHECK_TOOL([STAT],[stat])
 AC_CONFIG_FILES([Makefile
 		 data/Makefile
 		 src/Makefile
-		 src/hextime.pre])
+		 src/hextime.pre
+		 test/Makefile])
 AC_OUTPUT

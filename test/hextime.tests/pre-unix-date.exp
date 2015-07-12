@@ -1,0 +1,8 @@
+set timeout 5
+spawn ../src/hextime 02:56:15 21 July 1969 utc
+expect {
+	-exact "-D80CB1" {pass "got expected hextime"}
+	eof {fail "did not get expected hextime"}
+	timeout {unknown "timeout"}
+}
+
