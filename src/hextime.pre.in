@@ -94,6 +94,12 @@ then
 
 	RAWTIME="$(echo $RAWTIME | tr '[a-f]' '[A-F]')"
 
+	if $(echo $RAWTIME | grep -q '[^0-9A-F]')
+	then
+		echo -e $USAGE_MSG >&2
+		exit 1
+	fi
+
 	DECTIME=$(echo "10 o 16 i 0 $RAWTIME $POLARITY p" | $DC_CMD)
 
 	OFFSET=$(cat $UNIX_LEAP_SECONDS_FILE | $AWK_CMD '{old=0;offset=0;do{if($1>old&&('$DECTIME'-$2)>=$1){old=$1;offset=$2}}while(getline);print offset;}')
