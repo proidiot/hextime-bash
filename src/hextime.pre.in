@@ -27,6 +27,9 @@ WGET_CMD="@WGET@"
 STAT_CMD="@STAT@"
 DATAPATH="@PKGDATADIR@"
 
+MAXHEXTIME="F0C2AB7C54FE03"
+MINHEXTIME="-F0C2AC83AAA5D4"
+
 LEAP_SECONDS_URL="https://www.ietf.org/timezones/data/leap-seconds.list"
 
 UNIX_LEAP_SECONDS_FILE="$DATAPATH/unix-leap-seconds.list"
@@ -35,6 +38,7 @@ OLD_OFFSET=$((365 * 24 * 60 * 60))
 USAGE_MSG="Usage:\thextime [DATESTRING]\n\thextime -d HEXTIME\n\thextime --update\n\thextime --help\n\thextime --version"
 EXPLANATION_MSG="hextime is a hexadecimal representation of the actual number of seconds which\nhave passed since the Unix epoch (exactly midnight of 1 January 1970 UTC).\nUnlike some other measures of time, hextime does not include leap seconds;\nhextime is intended to be a linear measure of real time."
 OUT_OF_DATE_MSG="hextime: The time offset database may be out of date.\nPlease run \"hextime --update\" fix the problem."
+OVERFLOW_MSG="hextime: Due to limitations of the $DATE_CMD command, only hextimes between $MINHEXTIME and $MAXHEXTIME can be interpereted."
 COPYRIGHT_MSG="hextime-bash @PACKAGE_VERSION@  Copyright (C) 2015  Charles Southerland"
 LICENSE_MSG="This program is released under the terms of the GNU GPL v3 or later.\nThis program comes with ABSOLUTELY NO WARRANTY.\nThis is free software, and you are welcome to redistribute it under\ncertain conditions.See https://www.gnu.org/licenses/ for details."
 BUG_REPORT_MSG="Please report bugs at <https://github.com/proidiot/hextime-bash/issues>."
@@ -101,6 +105,17 @@ then
 	fi
 
 	DECTIME=$(echo "10 o 16 i 0 $RAWTIME $POLARITY p" | $DC_CMD)
+
+	if $(expr $(echo "10 o 16 i $MAXHEXTIME p" | $DC_CMD) "<" $DECTIME > /dev/null)
+	then
+		echo -e $OVERFLOW_MSG >&2
+		exit 1
+	fi
+	if $(expr $(echo -e "10 o 16 i 0 ${MINHEXTIME:1} - p" | $DC_CMD) ">" $DECTIME > /dev/null)
+	then
+		echo -e $OVERFLOW_MSG >&2
+		exit 1
+	fi
 
 	OFFSET=$(cat $UNIX_LEAP_SECONDS_FILE | $AWK_CMD '{old=0;offset=0;do{if($1>old&&('$DECTIME'-$2)>=$1){old=$1;offset=$2}}while(getline);print offset;}')
 
