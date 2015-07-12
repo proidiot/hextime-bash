@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/proidiot/hextime-bash.png?label=ready&title=Ready)](https://waffle.io/proidiot/hextime-bash)
 # hextime-bash
 hextime is a hexadecimal representation of the actual number of seconds which
 have passed since the Unix epoch (exactly midnight of 1 January 1970 UTC).
