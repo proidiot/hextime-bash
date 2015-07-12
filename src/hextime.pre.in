@@ -137,5 +137,14 @@ UNIXTIME=$($DATE_CMD -d "$DATESPEC" +%s)
 
 OFFSET=$(cat $UNIX_LEAP_SECONDS_FILE | $AWK_CMD '{old=0;offset=0;do{if($1>old&&('$UNIXTIME')>=$1){old=$1;offset=$2;}}while(getline);print offset;}')
 
-echo "10 i 16 o $UNIXTIME $OFFSET + p" | $DC_CMD
+if [ "x${UNIXTIME:0:1}" == "x-" ]
+then
+	RAWTIME="${UNIXTIME:1}"
+	POLARITY="-"
+else
+	RAWTIME="$UNIXTIME"
+	POLARITY="+"
+fi
+
+echo "10 i 16 o 0 $RAWTIME $POLARITY $OFFSET + p" | $DC_CMD
 
