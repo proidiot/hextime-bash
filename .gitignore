@@ -11,6 +11,12 @@ Makefile
 /configure.scan
 /stamp-h1
 
+# http://www.gnu.org/software/dejagnu
+
+/test/*.log
+/test/*.sum
+/test/site.*
+
 # project specific
 
 /hextime-bash-*.tar.gz

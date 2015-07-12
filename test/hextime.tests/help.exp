@@ -1,0 +1,8 @@
+set timeout 5
+spawn ../src/hextime --help
+expect {
+	-re {Usage:\s*hextime} {pass "got usage as expected"}
+	eof {fail "did not get help message"}
+	timeout {unknown "timeout"}
+}
+

@@ -1,0 +1,9 @@
+set timeout 5
+spawn ../src/hextime
+expect {
+	-re {.* .*} {fail "got unexpected space"}
+	-re {^[0-9A-F]+\r\n$} {pass "got hextime as expected"}
+	eof {fail "did not get hextime"}
+	timeout {unknown "timeout"}
+}
+
