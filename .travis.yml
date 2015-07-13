@@ -1,0 +1,4 @@
+# a dirty lie, but who cares? it gets me autotools
+language: c
+script: ./configure && make clean && make all && make check
+
