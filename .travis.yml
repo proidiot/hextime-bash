@@ -1,5 +1,5 @@
 # a dirty lie, but who cares? it gets me autotools
 language: c
-before_script: sudo apt-get install dejagnu
+before_script: sudo apt-get install dejagnu dc
 script: ./configure && make clean && make all && make check
 
