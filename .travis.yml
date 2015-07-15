@@ -1,4 +1,5 @@
 # a dirty lie, but who cares? it gets me autotools
 language: c
-script: ./configure && make clean && make all && make check
+before_script: sudo apt-get install dejagnu dc && echo set verbose 9 > ~/.dejagnurc
+script: autoreconf -fv && ./configure && make clean && make all && make check
 
