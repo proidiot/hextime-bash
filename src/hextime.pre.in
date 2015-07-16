@@ -51,20 +51,6 @@ then
 	exit 0
 fi
 
-if [ "$1" == "--update" ]
-then
-	$WGET_CMD -O - $LEAP_SECONDS_URL | $AWK_CMD '$1~/^[^#].+$/{print $1-2208988800"\t"$2}' > $UNIX_LEAP_SECONDS_FILE
-	exit 0
-fi
-
-LAST_MODIFIED=$($STAT_CMD -c %Y $UNIX_LEAP_SECONDS_FILE)
-OLD_TIME+=$(($($DATE_CMD +%s) - $OLD_OFFSET))
-
-if [ $LAST_MODIFIED -lt $OLD_TIME ]
-then
-	echo -e $OUT_OF_DATE_MSG >&2
-fi
-
 if [[ "$1" == "-h" || "$1" == "--help" ]]
 then
 	echo -e $USAGE_MSG
@@ -77,6 +63,20 @@ then
 	echo ""
 	echo -e $LICENSE_MSG
 	exit 0
+fi
+
+if [ "$1" == "--update" ]
+then
+	$WGET_CMD -O - $LEAP_SECONDS_URL | $AWK_CMD '$1~/^[^#].+$/{print $1-2208988800"\t"$2}' > $UNIX_LEAP_SECONDS_FILE
+	exit 0
+fi
+
+LAST_MODIFIED=$($STAT_CMD -c %Y $UNIX_LEAP_SECONDS_FILE)
+OLD_TIME+=$(($($DATE_CMD +%s) - $OLD_OFFSET))
+
+if [ $LAST_MODIFIED -lt $OLD_TIME ]
+then
+	echo -e $OUT_OF_DATE_MSG >&2
 fi
 
 if [ "$1" == "-d" ]
