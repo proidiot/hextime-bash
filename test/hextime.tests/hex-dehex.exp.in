@@ -1,0 +1,8 @@
+set timeout 5
+spawn @BASH@ -c "./hextime.check `./hextime.check -u -d 55947F24`"
+expect {
+	"55947F24" {pass "got expected hextime"}
+	eof {fail "did not get expected hextime"}
+	timeout {unknown "timeout"}
+}
+

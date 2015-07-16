@@ -2881,7 +2881,7 @@ fi
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/hextime.pre test/Makefile"
+ac_config_files="$ac_config_files Makefile data/Makefile src/Makefile src/hextime.pre test/Makefile test/hextime.tests/hex-dehex.exp test/hextime.tests/dehex-hex.exp"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3605,6 +3605,8 @@ do
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "src/hextime.pre") CONFIG_FILES="$CONFIG_FILES src/hextime.pre" ;;
     "test/Makefile") CONFIG_FILES="$CONFIG_FILES test/Makefile" ;;
+    "test/hextime.tests/hex-dehex.exp") CONFIG_FILES="$CONFIG_FILES test/hextime.tests/hex-dehex.exp" ;;
+    "test/hextime.tests/dehex-hex.exp") CONFIG_FILES="$CONFIG_FILES test/hextime.tests/dehex-hex.exp" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

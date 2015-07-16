@@ -1,0 +1,8 @@
+set timeout 5
+spawn @BASH@ -c "./hextime.check -u -d `./hextime.check Thu Jul  2 00:00:00 UTC 2015`"
+expect {
+	"Thu Jul  2 00:00:00 UTC 2015" {pass "got expected dehextime"}
+	eof {fail "did not get expected dehextime"}
+	timeout {unknown "timeout"}
+}
+
