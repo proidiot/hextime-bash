@@ -1,0 +1,8 @@
+set timeout 5
+spawn ./hextime.check -u -d 0
+expect {
+	-exact "Thu Jan  1 00:00:00 UTC 1970" {pass "got epoch string as expected"}
+	eof {fail "did not get epoch string"}
+	timeout {unknown "timeout"}
+}
+

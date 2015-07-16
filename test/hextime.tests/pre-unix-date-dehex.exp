@@ -1,0 +1,8 @@
+set timeout 5
+spawn ./hextime.check -u -d -D80CB1
+expect {
+	"Mon Jul 21 02:56:15 UTC 1969" {pass "got expected dehextime"}
+	eof {fail "did not get expected dehextime"}
+	timeout {unknown "timeout"}
+}
+

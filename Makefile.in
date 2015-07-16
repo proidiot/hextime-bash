@@ -78,7 +78,9 @@ POST_UNINSTALL = :
 subdir = .
 DIST_COMMON = INSTALL NEWS README AUTHORS ChangeLog \
 	$(srcdir)/Makefile.in $(srcdir)/Makefile.am \
-	$(top_srcdir)/configure $(am__configure_deps) COPYING \
+	$(top_srcdir)/configure $(am__configure_deps) \
+	$(top_srcdir)/test/hextime.tests/hex-dehex.exp.in \
+	$(top_srcdir)/test/hextime.tests/dehex-hex.exp.in COPYING \
 	install-sh missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -87,7 +89,8 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(install_sh) -d
-CONFIG_CLEAN_FILES =
+CONFIG_CLEAN_FILES = test/hextime.tests/hex-dehex.exp \
+	test/hextime.tests/dehex-hex.exp
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -303,6 +306,10 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	$(am__cd) $(srcdir) && $(ACLOCAL) $(ACLOCAL_AMFLAGS)
 $(am__aclocal_m4_deps):
+test/hextime.tests/hex-dehex.exp: $(top_builddir)/config.status $(top_srcdir)/test/hextime.tests/hex-dehex.exp.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+test/hextime.tests/dehex-hex.exp: $(top_builddir)/config.status $(top_srcdir)/test/hextime.tests/dehex-hex.exp.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run 'make' without going through this Makefile.

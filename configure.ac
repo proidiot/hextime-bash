@@ -25,5 +25,7 @@ AC_CONFIG_FILES([Makefile
 		 data/Makefile
 		 src/Makefile
 		 src/hextime.pre
-		 test/Makefile])
+		 test/Makefile
+		 test/hextime.tests/hex-dehex.exp
+		 test/hextime.tests/dehex-hex.exp])
 AC_OUTPUT

@@ -79,6 +79,13 @@ then
 	echo -e $OUT_OF_DATE_MSG >&2
 fi
 
+UTC_OPT=""
+if [ "x$1x" == "x-ux" ]
+then
+	UTC_OPT="-u"
+	shift
+fi
+
 if [ "$1" == "-d" ]
 then
 	if [ "$#" != "2" ]
@@ -121,7 +128,7 @@ then
 
 	UNIXTIME=$(($DECTIME - $OFFSET))
 
-	$DATE_CMD -d "00:00:00 jan 1 1970 utc +"$UNIXTIME" seconds"
+	$DATE_CMD $UTC_OPT -d "00:00:00 jan 1 1970 utc +"$UNIXTIME" seconds"
 
 	exit 0
 fi
