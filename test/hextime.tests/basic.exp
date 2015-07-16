@@ -1,5 +1,5 @@
 set timeout 5
-spawn ../src/hextime
+spawn ./hextime.check
 expect {
 	-re {.* .*} {fail "got unexpected space"}
 	-re {^[0-9A-F]+\r\n$} {pass "got hextime as expected"}

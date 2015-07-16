@@ -23,3 +23,5 @@ Makefile
 /data/unix-leap-seconds.list
 /src/hextime
 /src/hextime.pre
+/test/unix-leap-seconds.list
+/test/hextime.check
