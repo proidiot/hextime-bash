@@ -1,5 +1,5 @@
 set timeout 5
-spawn ../src/hextime 00:00:00 2 jul 2015 utc
+spawn ./hextime.check 00:00:00 2 jul 2015 utc
 expect {
 	"55947F24" {pass "got expected hextime"}
 	eof {fail "did not get expected hextime"}

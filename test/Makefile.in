@@ -187,6 +187,9 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = dejagnu
+check_SCRIPTS = hextime.check
+check_DATA = unix-leap-seconds.list
+CLEANFILES = $(check_SCRIPTS) $(check_DATA)
 DEJATOOL = hextime
 all: all-am
 
@@ -297,6 +300,7 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_SCRIPTS) $(check_DATA)
 	$(MAKE) $(AM_MAKEFLAGS) check-DEJAGNU
 check: check-am
 all-am: Makefile
@@ -323,6 +327,7 @@ install-strip:
 mostlyclean-generic:
 
 clean-generic:
+	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
@@ -411,6 +416,13 @@ uninstall-am:
 	mostlyclean-generic pdf pdf-am ps ps-am tags-am uninstall \
 	uninstall-am
 
+
+hextime.check: $(srcdir)/../src/hextime.pre
+	cat $(srcdir)/../src/hextime.pre | $(AWK) '{gsub("@PKGDATADIR@","'$(srcdir)'");print $$0}' > hextime.check
+	chmod +x hextime.check
+
+unix-leap-seconds.list: $(srcdir)/../data/leap-seconds.list
+	cat $(srcdir)/../data/leap-seconds.list | $(AWK) ' $$1~/^[^#].+/{print $$1-2208988800"\t"$$2}' > unix-leap-seconds.list
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
